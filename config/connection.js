@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/socialNetworkDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  // Use the new URL parser to avoid deprecation warnings
+  useNewUrlParser: true, 
+  // Using topology engine for better connection management
+  useUnifiedTopology: true, 
 });
 
-module.exports = mongoose.connection;
+// Export connection object
+module.exports = mongoose.connection; 
