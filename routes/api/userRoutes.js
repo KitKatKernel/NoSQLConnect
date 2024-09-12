@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const mongoose = require('mongoose');
+
 const { User, Thought } = require('../../models');
 
 // Get all users
@@ -11,17 +13,25 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a single user by id
+// GET a single user by id
 router.get('/:id', async (req, res) => {
   try {
+    // Debug, checking if the id is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid user ID format' });
+    }
+
     const user = await User.findOne({ _id: req.params.id })
       .populate('thoughts')
       .populate('friends');
+
     if (!user) {
-      return res.status(404).json({ message: 'No user with this id!' });
+      return res.status(404).json({ message: 'No user found with this id' });
     }
+
     res.json(user);
   } catch (err) {
+    console.error('Error in GET /api/users/:id:', err);
     res.status(500).json(err);
   }
 });

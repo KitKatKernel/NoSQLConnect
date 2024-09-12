@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const mongoose = require('mongoose');
 const { Thought, User } = require('../../models');
 
 // Get all thoughts
