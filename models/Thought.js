@@ -1,5 +1,17 @@
 const { Schema, model, Types } = require('mongoose'); // Import Schema, model, and Types from Mongoose
 
+// Helper function to format date
+const formatDate = (timestamp) => {
+  return new Date(timestamp).toLocaleString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+};
+
 // Define schema for reactions to thoughts
 const ReactionSchema = new Schema(
   {
@@ -19,11 +31,12 @@ const ReactionSchema = new Schema(
     createdAt: {
       type: Date, // Date the reaction was created
       default: Date.now, // Default = current date and time
-      get: timestamp => dateFormat(timestamp) // Use getter to format the date
+      get: timestamp => formatDate(timestamp) // Use getter to format the date
     }
   },
   {
     toJSON: {
+      virtuals: true,
       getters: true // Include getters when converting to JSON
     },
     id: false // Disable the default `_id` field
@@ -42,7 +55,7 @@ const ThoughtSchema = new Schema(
     createdAt: {
       type: Date, // Date the thought was created
       default: Date.now, // Default value is current date and time
-      get: timestamp => dateFormat(timestamp) // Use a getter to format the date
+      get: timestamp => formatDate(timestamp) // Use a getter to format the date
     },
     username: {
       type: String, // The username of who posted thought
